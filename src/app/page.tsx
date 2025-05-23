@@ -357,12 +357,7 @@ export default function Home() {
     analysisTriggeredRef.current = true;
     setStep('processing');
     triggerAnalysis(file);
-    
-    // Reset the flag when returning to upload step
-    if (step === 'upload') {
-      analysisTriggeredRef.current = false;
-    }
-  }, [step]);
+  }, []);
   
   // Reset the analysis triggered flag when returning to upload step
   useEffect(() => {
@@ -371,124 +366,8 @@ export default function Home() {
     }
   }, [step]);
 
-  useEffect(() => {
-    // This effect should only run on the client side
-    if (typeof window === 'undefined') return;
-    let paymentSuccessDetected = false;
-
-    const logState = (msg: string) => {
-      console.log(`[PAYMENT DEBUG] ${msg}`, { image, step });
-    };
-
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data) {
-        if (
-          (event.data.type === 'checkout-status-change' && event.data.status === 'success') ||
-          event.data.event_type === 'charge:confirmed' ||
-          event.data.event_type === 'charge:resolved' ||
-          event.data.event_type === 'charge:completed'
-        ) {
-          if (paymentSuccessDetected) return;
-          paymentSuccessDetected = true;
-          logState('Payment detected via postMessage');
-          setTimeout(() => {
-            logState('Calling triggerAnalysis after payment (postMessage)');
-            if (image && step === 'upload') {
-              safeTriggerAnalysis(image);
-            }
-          }, 3000);
-        }
-      }
-    };
-    window.addEventListener('message', handleMessage);
-
-    const checkForPaymentSuccess = () => {
-      if (paymentSuccessDetected) return;
-      const successElements = document.querySelectorAll('.ock-text-success, .ock-success-message');
-      if (successElements.length > 0) {
-        paymentSuccessDetected = true;
-        logState('Payment detected via DOM class');
-        setTimeout(() => {
-          logState('Calling triggerAnalysis after payment (DOM class)');
-          if (image && step === 'upload') {
-            safeTriggerAnalysis(image);
-          }
-        }, 3000);
-        return;
-      }
-      const allElements = document.querySelectorAll('*');
-      Array.from(allElements).forEach(element => {
-        if (
-          element.textContent?.includes('Payment successful') ||
-          element.textContent?.includes('Payment completed') ||
-          element.textContent?.includes('Transaction complete') ||
-          element.textContent?.includes('Payment confirmed') ||
-          element.textContent?.includes('View payment details')
-        ) {
-          paymentSuccessDetected = true;
-          logState('Payment detected via DOM text');
-          setTimeout(() => {
-            logState('Calling triggerAnalysis after payment (DOM text)');
-            if (image && step === 'upload') {
-              safeTriggerAnalysis(image);
-            }
-          }, 3000);
-          return;
-        }
-      });
-    };
-
-    const observer = new MutationObserver((mutations) => {
-      if (paymentSuccessDetected) return;
-      mutations.forEach((mutation) => {
-        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-          mutation.addedNodes.forEach((node) => {
-            if (node.nodeType === Node.ELEMENT_NODE) {
-              const element = node as HTMLElement;
-              const successElements = document.querySelectorAll('.ock-text-success, .ock-success-message');
-              if (successElements.length > 0) {
-                if (paymentSuccessDetected) return;
-                paymentSuccessDetected = true;
-                logState('Payment detected via MutationObserver class');
-                setTimeout(() => {
-                  logState('Calling triggerAnalysis after payment (MutationObserver class)');
-                  if (image && step === 'upload') {
-                    safeTriggerAnalysis(image);
-                  }
-                }, 3000);
-              }
-              if (
-                element.textContent?.includes('Payment successful') ||
-                element.textContent?.includes('Payment completed') ||
-                element.textContent?.includes('Transaction complete') ||
-                element.textContent?.includes('Payment confirmed') ||
-                element.textContent?.includes('View payment details')
-              ) {
-                if (paymentSuccessDetected) return;
-                paymentSuccessDetected = true;
-                logState('Payment detected via MutationObserver text');
-                setTimeout(() => {
-                  logState('Calling triggerAnalysis after payment (MutationObserver text)');
-                  if (image && step === 'upload') {
-                    safeTriggerAnalysis(image);
-                  }
-                }, 3000);
-              }
-            }
-          });
-        }
-      });
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    const interval = setInterval(checkForPaymentSuccess, 1500);
-
-    return () => {
-      window.removeEventListener('message', handleMessage);
-      observer.disconnect();
-      clearInterval(interval);
-    };
-  }, [image, step, safeTriggerAnalysis]);
+  // We've removed all other payment detection methods and will rely solely on
+  // the onStatus handler from the Checkout component
 
   return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#f8f9fa] to-[#e5e7eb] py-12 relative">
