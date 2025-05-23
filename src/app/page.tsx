@@ -34,15 +34,24 @@ function cleanAndFormatResult(raw: string): string {
 
   // Replace markdown headings with styled equivalents
   cleaned = cleaned.replace(/###?\s*/g, '\n\n');
+  
   // Bold important terms
   cleaned = cleaned.replace(/\*\*(.*?)\*\*/g, '<span class="font-bold">$1</span>');
-  // Numbered headings for sections
-  cleaned = cleaned.replace(/(\d+\.\s)/g, '<br/><span class="text-blue-500 font-bold">$1</span>');
+  
+  // Remove any standalone numbers that might appear in the text (like 1. 2. 3.)
+  cleaned = cleaned.replace(/^(\d+\.\s)$/gm, '');
+  cleaned = cleaned.replace(/\n(\d+\.\s)\n/g, '\n\n');
+  
+  // Numbered headings for sections - only keep those with text after the number
+  cleaned = cleaned.replace(/(\d+\.\s)([A-Za-z])/g, '<br/><span class="text-blue-500 font-bold">$1</span>$2');
+  
   // Replace - bullets with •
   cleaned = cleaned.replace(/\n- /g, '\n• ');
+  
   // Remove standalone dash symbols that aren't part of words
-  cleaned = cleaned.replace(/([^\w-])-(\s|$)/g, '$1$2');
+  cleaned = cleaned.replace(/([^\w-])-(\ |$)/g, '$1$2');
   cleaned = cleaned.replace(/(^|\s)-([^\w-])/g, '$1$2');
+  
   // Remove excessive line breaks
   cleaned = cleaned.replace(/\n{3,}/g, '\n\n');
 
@@ -225,7 +234,7 @@ export default function Home() {
   const formattedCards = splitResultCards(cleanAndFormatResult(result));
 
   const handleCardScroll = (e: React.UIEvent<HTMLDivElement>, idx: number) => {
-    if (idx === 1) return; // Don't auto-advance on the 2nd card
+    // Removed the check that prevented navigation on the 2nd card
     const el = e.target as HTMLDivElement;
     // Scroll down for next
     if (el.scrollTop + el.clientHeight >= el.scrollHeight - 8) {

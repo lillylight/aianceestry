@@ -494,34 +494,21 @@ export function downloadAnalysisAsPDF(
         const chartHeight = 220;
         const chartX = (pageWidth - chartWidth) / 2;
         
-        // Wait to ensure PDF is ready for image
-        setTimeout(() => {}, 0);
-        
-        // Use a more reliable approach to add image
-        try {
-          // First try with regular method
-          doc.addImage(
-            pieChartDataUrl, 
-            'PNG', 
-            chartX, 120, 
-            chartWidth, chartHeight, 
-            undefined, 
-            'FAST'
-          );
-        } catch (imageError) {
-          console.error('First image add attempt failed, trying alternate approach:', imageError);
-          
-          // Second backup approach - split base64 to avoid length issues
-          const base64Data = pieChartDataUrl.split('base64,')[1];
-          doc.addImage(
-            base64Data, 
-            'PNG', 
-            chartX, 120, 
-            chartWidth, chartHeight, 
-            undefined, 
-            'FAST'
-          );
+        // Process the image data to ensure it's valid
+        const base64Data = pieChartDataUrl.split('base64,')[1];
+        if (!base64Data) {
+          throw new Error('Could not extract base64 data from chart image');
         }
+        
+        // Add the image using the base64 data directly
+        doc.addImage(
+          base64Data, 
+          'PNG', 
+          chartX, 120, 
+          chartWidth, chartHeight, 
+          undefined, 
+          'FAST'
+        );
         
         // Add legend
         let legendY = 360;
