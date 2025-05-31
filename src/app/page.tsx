@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useMiniKit } from '@coinbase/onchainkit/minikit';
 import UploadArea from "../components/UploadArea";
 // import PremiumUploadArea from "../components/PremiumUploadArea";
 import AncestryPieChart, { AncestryDatum } from "../components/AncestryPieChart";
