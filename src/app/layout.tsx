@@ -19,10 +19,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "aiancestry",
-  description: "aiancestry - AI-powered ancestry analysis",
+  title: "AI Ancestry",
+  description: "AI-powered ancestry analysis from DNA data",
   icons: {
     icon: "/favicon.png",
+  },
+  manifest: "/manifest.json",
+  other: {
+    "fc:frame": "vNext",
+    "fc:frame:image": process.env.NEXT_PUBLIC_IMAGE_URL || "/ai_anc-removebg-preview (1).png",
+    "fc:frame:button:1": "Launch AI Ancestry",
+    "fc:frame:button:1:action": "launch_frame",
+    "fc:frame:button:1:target": process.env.NEXT_PUBLIC_URL || "https://aiancestry.xyz",
   },
 };
 

@@ -33,9 +33,14 @@ function renderParagraphsWithBoldSpans(doc: jsPDF, paragraphs: string[], pageWid
   const indent = 32;
   const marginBottom = 60;
   const pageBottom = 812 - marginBottom;
+  
   for (let idx = 0; idx < paragraphs.length; idx++) {
     let para = paragraphs[idx].replace(/^[-•]\s*/, '');
     if (!para.trim()) { y += 18; continue; }
+    
+    // Clean up any special characters that might cause rendering issues
+    para = para.replace(/[""]/g, '"').replace(/['']/g, "'").replace(/[–—]/g, '-');
+    
     const isHeadingLine = isHeading(para);
     const genericBoldMatch = para.match(/^(\s*)([A-Za-z0-9&'()\/-\s]+:)(.*)$/);
     if (genericBoldMatch) {
@@ -235,8 +240,6 @@ function renderAncestryBreakdownBlocks(doc: jsPDF, ancestryBlocks: { region: str
   return y;
 }
 
-// Import additional modules if needed
-
 // Helper function to create a basic pie chart directly in the PDF
 function createBasicPieChart(
   doc: jsPDF, 
@@ -270,7 +273,7 @@ function createBasicPieChart(
     const total = data.reduce((sum, item) => sum + item.percent, 0);
     
     // Draw pie chart
-    let startAngle = 0;
+    let startAngle = -Math.PI / 2; // Start from top
     const colors = ['#2f80ed','#f2994a','#27ae60','#eb5757','#9b51e0','#56ccf2','#f2c94c','#6fcf97','#bb6bd9'];
     
     data.forEach((item, i) => {
@@ -278,46 +281,65 @@ function createBasicPieChart(
       const endAngle = startAngle + sliceAngle;
       const color = colors[i % colors.length];
       
-      // Draw pie slice
-      doc.setFillColor(color);
-      doc.setDrawColor(255, 255, 255);
-      doc.setLineWidth(1);
+      // Convert hex color to RGB
+      const r = parseInt(color.slice(1, 3), 16);
+      const g = parseInt(color.slice(3, 5), 16);
+      const b = parseInt(color.slice(5, 7), 16);
       
-      // Draw the slice using a different approach since jsPDF doesn't have direct arc support
-      // We'll use multiple line segments to approximate an arc
-      const segments = 16; // Number of line segments to use for the arc
+      // Draw pie slice
+      doc.setFillColor(r, g, b);
+      doc.setDrawColor(255, 255, 255);
+      doc.setLineWidth(2);
+      
+      // Create a path for the slice
+      const segments = 20; // Number of line segments to use for the arc
       
       // Start from the center
-      doc.setDrawColor(color); // Set same fill and draw color
-      doc.setFillColor(color);
+      let pathX = centerX;
+      let pathY = centerY;
       
-      // Create a path
-      const pathData = [];
-      
-      // Start at center
-      pathData.push({op: 'm', c: [centerX, centerY]});
-      
-      // Draw line to start of arc
+      // Move to the start of the arc
       const startX = centerX + Math.cos(startAngle) * radius;
       const startY = centerY + Math.sin(startAngle) * radius;
-      pathData.push({op: 'l', c: [startX, startY]});
       
-      // Add the arc segments
-      for (let j = 0; j <= segments; j++) {
-        const segAngle = startAngle + (j / segments) * (endAngle - startAngle);
-        const segX = centerX + Math.cos(segAngle) * radius;
-        const segY = centerY + Math.sin(segAngle) * radius;
-        pathData.push({op: 'l', c: [segX, segY]});
+      // Draw the slice
+      doc.triangle(centerX, centerY, startX, startY, startX, startY, 'F');
+      
+      // Draw the arc using multiple triangles
+      for (let j = 0; j < segments; j++) {
+        const angle1 = startAngle + (j / segments) * sliceAngle;
+        const angle2 = startAngle + ((j + 1) / segments) * sliceAngle;
+        
+        const x1 = centerX + Math.cos(angle1) * radius;
+        const y1 = centerY + Math.sin(angle1) * radius;
+        const x2 = centerX + Math.cos(angle2) * radius;
+        const y2 = centerY + Math.sin(angle2) * radius;
+        
+        doc.triangle(centerX, centerY, x1, y1, x2, y2, 'F');
       }
-      
-      // Close path back to center
-      pathData.push({op: 'l', c: [centerX, centerY]});
-      
-      // Draw the path
-      doc.path(pathData, 'F');
       
       startAngle = endAngle;
     });
+    
+    // Add legend below the chart
+    let legendY = y + height + 40;
+    data.forEach((item, i) => {
+      const color = colors[i % colors.length];
+      const r = parseInt(color.slice(1, 3), 16);
+      const g = parseInt(color.slice(3, 5), 16);
+      const b = parseInt(color.slice(5, 7), 16);
+      
+      doc.setFillColor(r, g, b);
+      doc.rect(centerX - 100, legendY - 5, 10, 10, 'F');
+      
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(12);
+      doc.setTextColor('#23252b');
+      doc.text(`${item.region} (${item.percent}%)`, centerX - 85, legendY + 2);
+      
+      legendY += 20;
+    });
+    
   } catch (error) {
     console.error('Error creating basic pie chart:', error);
     doc.setFont('helvetica', 'italic');
@@ -334,6 +356,9 @@ export function downloadAnalysisAsPDF(
 ) {
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const pageWidth = doc.internal.pageSize.getWidth();
+
+  // Clean the result text to fix any encoding issues
+  result = result.replace(/[""]/g, '"').replace(/['']/g, "'").replace(/[–—]/g, '-');
 
   doc.setFillColor(245, 246, 250);
   doc.rect(0, 0, pageWidth, doc.internal.pageSize.getHeight(), 'F');
@@ -479,74 +504,46 @@ export function downloadAnalysisAsPDF(
     doc.setTextColor('#23252b');
     doc.text('Ancestry Breakdown', pageWidth / 2, 90, { align: 'center' });
     
-    // Use the image-based pie chart approach which was working correctly
-    if (pieChartDataUrl) {
+    // Try to use the image-based pie chart if available
+    if (pieChartDataUrl && pieChartDataUrl.startsWith('data:image/png;base64,')) {
       try {
-        console.log('PDF: Rendering pie chart with data URL of length:', pieChartDataUrl.length);
+        console.log('PDF: Attempting to render pie chart image');
         
-        // Validate the data URL format
-        if (!pieChartDataUrl.startsWith('data:image/png;base64,')) {
-          throw new Error('Invalid pie chart data URL format');
-        }
-        
-        // Make sure to wait before adding image to ensure PDF is ready
         const chartWidth = 320;
         const chartHeight = 220;
         const chartX = (pageWidth - chartWidth) / 2;
         
-        // Process the image data to ensure it's valid
-        const base64Data = pieChartDataUrl.split('base64,')[1];
-        if (!base64Data) {
-          throw new Error('Could not extract base64 data from chart image');
-        }
+        // Add the image to the PDF
+        doc.addImage(pieChartDataUrl, 'PNG', chartX, 120, chartWidth, chartHeight);
         
-        // Add the image using the base64 data directly
-        doc.addImage(
-          base64Data, 
-          'PNG', 
-          chartX, 120, 
-          chartWidth, chartHeight, 
-          undefined, 
-          'FAST'
-        );
-        
-        // Add legend
+        // Add legend below the chart
         let legendY = 360;
         const legendBlockWidth = 340;
         const legendX = (pageWidth - legendBlockWidth) / 2 + 24;
         ancestryData.forEach((item, i) => {
           const color = ['#2f80ed','#f2994a','#27ae60','#eb5757','#9b51e0','#56ccf2','#f2c94c','#6fcf97','#bb6bd9'][i%9];
-          doc.setFillColor(color);
+          const r = parseInt(color.slice(1, 3), 16);
+          const g = parseInt(color.slice(3, 5), 16);
+          const b = parseInt(color.slice(5, 7), 16);
+          doc.setFillColor(r, g, b);
           doc.circle(legendX, legendY, 6, 'F');
           doc.setFontSize(15);
           doc.setTextColor('#23252b');
-          let label = `${item.region}`;
-          if (!/\s$/.test(label)) label += ' ';
-          doc.text(`${label}(${item.percent}%)`, legendX + 15, legendY + 5);
+          doc.text(`${item.region} (${item.percent}%)`, legendX + 15, legendY + 5);
           legendY += 28;
         });
         
-        console.log('PDF: Pie chart rendered successfully');
+        console.log('PDF: Pie chart rendered successfully from image');
       } catch (e) {
-        console.error('Error rendering pie chart in PDF:', e);
-        // Fallback if chart rendering fails - create a basic pie chart directly in the PDF
+        console.error('Error rendering pie chart image in PDF:', e);
+        // Fallback to basic chart
         createBasicPieChart(doc, ancestryData, pageWidth, 120, 320, 220);
       }
     } else {
-      console.warn('PDF: No pie chart data URL provided, generating basic chart');
-      // Create a basic pie chart directly in the PDF if we don't have an image
+      console.log('PDF: No valid pie chart image, creating basic chart');
+      // Create a basic pie chart directly in the PDF
       createBasicPieChart(doc, ancestryData, pageWidth, 120, 320, 220);
     }
-    
-    // Add text breakdown
-    const ancestryBlocks = ancestryData.map(item => ({ 
-      region: item.region, 
-      percent: item.percent, 
-      description: '' 
-    }));
-    
-    let y = 400; // Start after the chart
-    y = renderAncestryBreakdownBlocks(doc, ancestryBlocks, pageWidth, y);
   }
 
   doc.save('ancestry-analysis-report.pdf');

@@ -7,44 +7,71 @@ import html2canvas from "html2canvas";
  */
 export async function chartToImage(element: HTMLElement): Promise<string> {
   if (!element) {
-    console.error('Element is null or undefined');
+    console.error('chartToImage: Element is null or undefined');
     return '';
   }
   
   try {
-    // Wait longer to ensure chart is fully rendered
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    console.log('chartToImage: Starting capture process');
+    
+    // Wait for any animations to complete
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Force a reflow to ensure the element is fully rendered
+    element.offsetHeight;
+    
+    // Get the canvas element inside the chart container
+    const canvas = element.querySelector('canvas');
+    if (canvas) {
+      console.log('chartToImage: Found canvas element, using direct canvas approach');
+      // If we have a canvas element (from Chart.js), use it directly
+      const dataUrl = canvas.toDataURL('image/png');
+      console.log('chartToImage: Canvas data URL length:', dataUrl.length);
+      return dataUrl;
+    }
+    
+    console.log('chartToImage: No canvas found, using html2canvas');
     
     // Prepare the element for capture
     const originalDisplay = element.style.display;
     const originalVisibility = element.style.visibility;
     const originalPosition = element.style.position;
     const originalZIndex = element.style.zIndex;
+    const originalOpacity = element.style.opacity;
     
     // Make sure the element is fully visible during capture
     element.style.visibility = 'visible';
     element.style.display = 'block';
     element.style.position = 'relative';
     element.style.zIndex = '9999';
+    element.style.opacity = '1';
+    
+    // Get element bounds
+    const rect = element.getBoundingClientRect();
+    console.log('chartToImage: Element bounds:', { width: rect.width, height: rect.height });
     
     // Ensure all SVG elements have explicit dimensions
     const svgs = element.querySelectorAll('svg');
     svgs.forEach(svg => {
-      const rect = svg.getBoundingClientRect();
-      svg.setAttribute('width', rect.width.toString());
-      svg.setAttribute('height', rect.height.toString());
+      const svgRect = svg.getBoundingClientRect();
+      svg.setAttribute('width', svgRect.width.toString());
+      svg.setAttribute('height', svgRect.height.toString());
       svg.style.overflow = 'visible';
     });
     
-    // Capture the element directly without cloning
-    const canvas = await html2canvas(element, {
-      backgroundColor: null,
-      scale: 3, // Higher scale for better quality
-      logging: false,
+    // Capture the element
+    const capturedCanvas = await html2canvas(element, {
+      backgroundColor: '#ffffff',
+      scale: 2, // Good quality without being too large
+      logging: true, // Enable logging for debugging
       useCORS: true,
       allowTaint: true,
       foreignObjectRendering: false,
-      imageTimeout: 0, // No timeout for image loading
+      imageTimeout: 0,
+      width: rect.width,
+      height: rect.height,
+      windowWidth: rect.width,
+      windowHeight: rect.height,
     });
     
     // Restore original styles
@@ -52,13 +79,19 @@ export async function chartToImage(element: HTMLElement): Promise<string> {
     element.style.visibility = originalVisibility;
     element.style.position = originalPosition;
     element.style.zIndex = originalZIndex;
+    element.style.opacity = originalOpacity;
     
-    // Get data URL but make sure it's properly formatted for jsPDF
-    const dataUrl = canvas.toDataURL('image/png');
-    console.log('Generated chart data URL length:', dataUrl.length);
+    // Get data URL
+    const dataUrl = capturedCanvas.toDataURL('image/png');
+    console.log('chartToImage: Generated data URL length:', dataUrl.length);
+    
+    if (dataUrl.length < 100) {
+      throw new Error('Generated image is too small, likely empty');
+    }
+    
     return dataUrl;
   } catch (error) {
-    console.error('Error in chartToImage:', error);
+    console.error('chartToImage: Error during capture:', error);
     return '';
   }
 }

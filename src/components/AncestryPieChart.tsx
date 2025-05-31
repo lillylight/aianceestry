@@ -7,6 +7,7 @@ import {
   Legend,
   ChartData,
 } from "chart.js";
+import React from "react";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -75,10 +76,9 @@ export default function AncestryPieChart({ data }: { data: AncestryDatum[] }) {
     ],
   };
   return (
-    <div style={{ maxWidth: 400, minHeight: 420, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+    <div className="ancestry-pie-chart-capture" style={{ maxWidth: 400, minHeight: 420, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
       <Pie data={chartData} options={{ plugins: { legend: { display: false } } }} />
       <div
-        className="w-full"
         style={{
           background: "rgba(255,255,255,0.95)",
           borderRadius: 10,
@@ -87,15 +87,10 @@ export default function AncestryPieChart({ data }: { data: AncestryDatum[] }) {
           fontSize: 14,
           minWidth: 180,
           marginTop: 10,
-          color: '#222', // default text color
         }}
       >
         {sanitizedData.map((item, i) => (
-          <div
-            key={i}
-            className="flex items-center mb-2 text-base md:text-sm"
-            style={{ color: '#222', fontWeight: 500, wordBreak: 'break-word' }}
-          >
+          <div key={i} style={{ display: "flex", alignItems: "center", marginBottom: 6 }}>
             <span style={{
               display: "inline-block",
               width: 16,
@@ -104,7 +99,7 @@ export default function AncestryPieChart({ data }: { data: AncestryDatum[] }) {
               marginRight: 10,
               background: colors[i % colors.length],
             }} />
-            <span style={{ color: '#222', fontWeight: 600 }}>{item.region}: {item.percent}%</span>
+            <span style={{ color: "#000000", fontWeight: 500 }}>{item.region}: {item.percent}%</span>
           </div>
         ))}
       </div>

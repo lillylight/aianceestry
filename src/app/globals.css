@@ -80,20 +80,26 @@ body {
 }
 @media (max-width: 768px) {
   .openai-card {
-    padding: 1.2rem 0.5rem 1rem 0.5rem;
-    max-width: 100vw;
-    margin: 1rem 0;
+    padding: 1.5rem 1rem;
+    max-width: 95vw;
+    margin: 1rem auto;
+    border-radius: 1.5rem;
   }
   .openai-btn {
-    font-size: clamp(0.8rem, 2vw, 0.95rem);
-    min-width: 36px;
-    min-height: 24px;
-    padding: 0.25rem 0.5rem;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    min-width: 40px;
+    min-height: 32px;
+    padding: 0.4rem 0.8rem;
   }
   .floating-text-card > div {
     min-width: 140px;
     padding: 0.7rem 0.5rem;
     font-size: 0.95rem;
+  }
+  .floating-result-text {
+    padding: 1rem;
+    font-size: 0.95rem;
+    max-height: 350px !important;
   }
   .progress-circle-wrap {
     width: 5.5rem;
@@ -102,30 +108,83 @@ body {
   .prediction-screen-card {
     min-height: 220px;
   }
+  /* Fix wallet button on mobile */
+  .ock-connect-glass {
+    font-size: 0.85rem !important;
+    padding: 0.4rem 0.8rem !important;
+  }
+  /* Fix carousel slides on mobile */
+  .carousel-slide {
+    min-height: 400px !important;
+    padding: 2rem 1rem !important;
+  }
+  /* Fix table on mobile */
+  table {
+    font-size: 0.85rem !important;
+  }
+  table th, table td {
+    padding: 8px 12px !important;
+  }
 }
 @media (max-width: 480px) {
   .openai-card {
-    padding: 0.7rem 0.2rem 0.7rem 0.2rem;
-    max-width: 100vw;
-    margin: 0.5rem 0;
+    padding: 1rem 0.75rem;
+    max-width: 92vw;
+    margin: 0.5rem auto;
+    border-radius: 1.2rem;
   }
   .openai-btn {
-    font-size: 0.8rem;
-    min-width: 28px;
-    min-height: 20px;
-    padding: 0.15rem 0.35rem;
+    font-size: 0.75rem;
+    min-width: 32px;
+    min-height: 28px;
+    padding: 0.3rem 0.6rem;
+    gap: 0.3rem;
   }
   .floating-text-card > div {
     min-width: 90px;
     padding: 0.4rem 0.25rem;
     font-size: 0.88rem;
   }
+  .floating-result-text {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+    max-height: 300px !important;
+  }
   .progress-circle-wrap {
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 4rem;
+    height: 4rem;
   }
   .prediction-screen-card {
     min-height: 120px;
+  }
+  /* Fix wallet button on small mobile */
+  .ock-connect-glass {
+    font-size: 0.75rem !important;
+    padding: 0.3rem 0.6rem !important;
+  }
+  /* Fix carousel slides on small mobile */
+  .carousel-slide {
+    min-height: 350px !important;
+    padding: 1.5rem 0.75rem !important;
+  }
+  .carousel-slide h2 {
+    font-size: 1.1rem !important;
+  }
+  /* Fix table on small mobile */
+  table {
+    font-size: 0.75rem !important;
+  }
+  table th, table td {
+    padding: 6px 8px !important;
+  }
+  /* Fix pie chart on mobile */
+  .ancestry-pie-chart-capture {
+    max-width: 300px !important;
+    padding: 0 1rem;
+  }
+  .ancestry-pie-chart-capture canvas {
+    max-width: 250px !important;
+    max-height: 250px !important;
   }
 }
 
