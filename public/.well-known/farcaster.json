@@ -16,8 +16,8 @@
     "ogImageUrl": "https://aianceestry-5h7h.vercel.app/og.png"
   },
   "accountAssociation": {
-    "header": "eyJmaWQiOjk4MjA5MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDEyMmYyOTM1YjhBMTI1Rjg3NTM4MkZDMDVGRjE5MTZmMmE0OTYyNmMifQ",
+    "header": "eyJmaWQiOjk4MjA5MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDEyMmYyOTM1YjhBMTI1Rjg3NTM4MkZDMDVGRjE5MTZmMmE0OTYyNmMifQ==",
     "payload": "eyJkb21haW4iOiJhaWFuY2VzdHJ5Lnh5eiJ9",
-    "signature": "MHgyYTUyYzAxOTc5YjUyNjJhOThiMTI5ZDAzMWVmOGZiNzE2YTNhOWYyN2Y4MTJmNTE1OWFkZmZiNzdmYjkyODZmMDhkNGVmMzUzOGIwYzkzNTRkNjVhZjFlYWUzNjI2OGI1NTVkOGQ2Y2Q2M2I3ZmQwNDk3MGRiNjc3MjQ0OTRiNjFi"
+    "signature": "0x10d0ded8df0d50e7f0b17f1115642524fe64152de8de51e418bb58f5ffd1b4c40b4eee4a4706ef68e344dd900dbd22ce2eedf9dd47be5df730c516189ecd2ccf401c"
   }
 }
