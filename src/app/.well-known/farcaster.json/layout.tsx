@@ -53,7 +53,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#f7f8fa] min-h-screen`}>
         <Providers>
-          {children}
+          <div className="minikit-app">
+            {children}
+          </div>
         </Providers>
       </body>
     </html>
