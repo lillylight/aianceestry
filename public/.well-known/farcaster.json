@@ -1,27 +1,19 @@
 {
   "frame": {
-    "version": "next",
+    "version": "1",
     "name": "AI Ancestry",
-    "iconUrl": "https://aianceestry-5h7h.vercel.app/icon.png",
-    "iconWidth": 200,
-    "iconHeight": 200,
-    "homeUrl": "https://aianceestry-5h7h.vercel.app",
-    "splashImageUrl": "https://aianceestry-5h7h.vercel.app/splash.png",
-    "splashWidth": 1200,
-    "splashHeight": 1200,
+    "iconUrl": "https://aianceestry-5h7h.vercel.app/icon-1024x1024.png",
+    "homeUrl": "https://aianceestry-5h7h.vercel.app/",
+    "splashImageUrl": "https://aianceestry-5h7h.vercel.app/splash-200x200.png",
     "splashBackgroundColor": "#ffffff",
     "subtitle": "Discover your ancestry with AI",
     "description": "Get AI-powered ancestry analysis and insights based on your genetic data.",
     "primaryCategory": "utility",
     "tags": ["ancestry", "ai", "genetics", "dna"],
-    "heroImageUrl": "https://aianceestry-5h7h.vercel.app/hero.png",
-    "heroWidth": 1000,
-    "heroHeight": 500,
+    "heroImageUrl": "https://aianceestry-5h7h.vercel.app/hero-1200x630.png",
     "ogTitle": "AI Ancestry Analysis",
     "ogDescription": "Discover your ancestry through AI-powered analysis of your genetic data.",
-    "ogImageUrl": "https://aianceestry-5h7h.vercel.app/og.png",
-    "ogWidth": 1200,
-    "ogHeight": 630
+    "ogImageUrl": "https://aianceestry-5h7h.vercel.app/og-1200x630.png"
   },
   "accountAssociation": {
     "header": "eyJmaWQiOjk4MjA5MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDEyMmYyOTM1YjhBMTI1Rjg3NTM4MkZDMDVGRjE5MTZmMmE0OTYyNmMifQ",
