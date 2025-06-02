@@ -25,12 +25,21 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   other: {
-    "fc:frame": "vNext",
-    "fc:frame:image": "https://aianceestry-5h7h.vercel.app/onchainkit-logo.png",
-    "fc:frame:button:1": "Launch AI Ancestry",
-    "fc:frame:button:1:action": "link",
-    "fc:frame:button:1:target": "https://aianceestry-5h7h.vercel.app",
-    "og:image": "https://aianceestry-5h7h.vercel.app/onchainkit-logo.png",
+    "fc:frame": JSON.stringify({
+      "version": "next",
+      "imageUrl": "https://aianceestry-5h7h.vercel.app/hero.png",
+      "button": {
+        "title": "Launch AI Ancestry",
+        "action": {
+          "type": "launch_frame",
+          "name": "AI Ancestry",
+          "url": "https://aianceestry-5h7h.vercel.app",
+          "splashImageUrl": "https://aianceestry-5h7h.vercel.app/splash.png",
+          "splashBackgroundColor": "#f7f8fa"
+        }
+      }
+    }),
+    "og:image": "https://aianceestry-5h7h.vercel.app/hero.png",
   },
 };
 
