@@ -27,10 +27,11 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   other: {
     "fc:frame": "vNext",
-    "fc:frame:image": process.env.NEXT_PUBLIC_IMAGE_URL || "/ai_anc-removebg-preview (1).png",
+    "fc:frame:image": "https://aianceestry-5h7h.vercel.app/onchainkit-logo.png",
     "fc:frame:button:1": "Launch AI Ancestry",
-    "fc:frame:button:1:action": "launch_frame",
-    "fc:frame:button:1:target": process.env.NEXT_PUBLIC_URL || "https://aiancestry.xyz",
+    "fc:frame:button:1:action": "link",
+    "fc:frame:button:1:target": "https://aianceestry-5h7h.vercel.app",
+    "og:image": "https://aianceestry-5h7h.vercel.app/onchainkit-logo.png",
   },
 };
 

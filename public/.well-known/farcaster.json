@@ -2,22 +2,22 @@
   "frame": {
     "version": "1",
     "name": "AI Ancestry",
-    "iconUrl": "https://aianceestry-5h7h.vercel.app/icon-1024x1024.png",
+    "iconUrl": "https://aianceestry-5h7h.vercel.app/favicon.png",
     "homeUrl": "https://aianceestry-5h7h.vercel.app/",
-    "splashImageUrl": "https://aianceestry-5h7h.vercel.app/splash-200x200.png",
+    "splashImageUrl": "https://aianceestry-5h7h.vercel.app/onchainkit-logo.png",
     "splashBackgroundColor": "#ffffff",
     "subtitle": "Discover your ancestry with AI",
     "description": "Get AI-powered ancestry analysis and insights based on your genetic data.",
     "primaryCategory": "utility",
     "tags": ["ancestry", "ai", "genetics", "dna"],
-    "heroImageUrl": "https://aianceestry-5h7h.vercel.app/hero-1200x630.png",
+    "heroImageUrl": "https://aianceestry-5h7h.vercel.app/onchainkit-logo.png",
     "ogTitle": "AI Ancestry Analysis",
     "ogDescription": "Discover your ancestry through AI-powered analysis of your genetic data.",
-    "ogImageUrl": "https://aianceestry-5h7h.vercel.app/og-1200x630.png"
+    "ogImageUrl": "https://aianceestry-5h7h.vercel.app/onchainkit-logo.png"
   },
   "accountAssociation": {
     "header": "eyJmaWQiOjk4MjA5MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDEyMmYyOTM1YjhBMTI1Rjg3NTM4MkZDMDVGRjE5MTZmMmE0OTYyNmMifQ",
-    "payload": "eyJkb21haW4iOiJhaWFuY2VzdHJ5Lnh5eiJ9",
-    "signature": "MHgyYTUyYzAxOTc5YjUyNjJhOThiMTI5ZDAzMWVmOGZiNzE2YTNhOWYyN2Y4MTJmNTE1OWFkZmZiNzdmYjkyODZmMDhkNGVmMzUzOGIwYzkzNTRkNjVhZjFlYWUzNjI2OGI1NTVkOGQ2Y2Q2M2I3ZmQwNDk3MGRiNjc3MjQ0OTRiNjFi"
+    "payload": "eyJkb21haW4iOiJhaWFuY2VzdHJ5LTV3N2gudmVyY2VsLmFwcCJ9",
+    "signature": "MHgyYTUyYzAxOTc5YjUyNjJhOThiMTI5ZDAzMWVmOGZiNzE2YTNhOWYyN2Y4MTJmNTE1OWFkZmZiNzdmYjkyODZmMDhkNGVmфаОГIwYzkzNTRkNjVhZjFlYWUzNjI2OGI1NTVkOGQ2Y2Q2M2I3ZmQwNDk3MGRiNjc3MjQ0OTRiNjFi"
   }
 }
