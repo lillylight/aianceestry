@@ -1,0 +1,12 @@
+{
+  "name": "AI Ancestry",
+  "version": "1.0.0",
+  "description": "Discover your ancestry through AI-powered analysis",
+  "icon": "https://aianceestry-5h7h.vercel.app/favicon.png",
+  "home_url": "https://aianceestry-5h7h.vercel.app",
+  "image_url": "https://aianceestry-5h7h.vercel.app/onchainkit-logo.png",
+  "button_title": "Analyze Ancestry",
+  "splash_image_url": "https://aianceestry-5h7h.vercel.app/dna.svg",
+  "splash_background_color": "#ffffff",
+  "theme_color": "#000000"
+}
