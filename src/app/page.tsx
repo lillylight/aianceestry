@@ -21,6 +21,7 @@ import { motion } from 'framer-motion';
 // Import useAccount from wagmi to properly detect wallet connection
 import { useAccount } from 'wagmi';
 import { FundButton, getOnrampBuyUrl } from '@coinbase/onchainkit/fund';
+import VisitorCounter from '../components/VisitorCounter';
 
 const PRODUCT_ID = process.env.NEXT_PUBLIC_PRODUCT_ID || 'ca407516-32fd-4113-8d1a-c997c1b1a7ec';
 
@@ -231,9 +232,18 @@ export default function Home() {
       console.warn('Chart element not found');
     }
     
-    // Import and call the PDF generation function
+    // Import the PDF generation function
     const { downloadAnalysisAsPDF } = await import('../utils/pdfUtils');
-    downloadAnalysisAsPDF(result, ancestryData, pieChartDataUrl);
+    
+    // Increment the counter
+    try {
+      await fetch('/api/counter', { method: 'POST' });
+    } catch (error) {
+      console.error('Failed to update counter:', error);
+    }
+    
+    // Generate the PDF
+    downloadAnalysisAsPDF(result, ancestryData, pieChartDataUrl, imageUrl || undefined);
   };
 
   const handleShare = (platform: 'twitter' | 'facebook' | 'copy') => {
@@ -621,6 +631,7 @@ export default function Home() {
             )}
           </>
         )}
+        <VisitorCounter />
       </div>
   );
 }
