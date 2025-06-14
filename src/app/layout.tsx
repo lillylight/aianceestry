@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import '@coinbase/onchainkit/styles.css';
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -18,6 +22,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+<<<<<<< HEAD
   title: "AI Ancestry",
   description: "AI-powered ancestry analysis from DNA data",
   icons: {
@@ -41,6 +46,13 @@ export const metadata: Metadata = {
     }),
     "og:image": "https://aianceestry-5h7h.vercel.app/hero.png",
   },
+=======
+  title: "aiancestry",
+  description: "aiancestry - AI-powered ancestry analysis",
+  icons: {
+    icon: "/favicon.png",
+  },
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
 };
 
 export default function RootLayout({

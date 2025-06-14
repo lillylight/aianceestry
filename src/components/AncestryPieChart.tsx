@@ -53,6 +53,10 @@ export default function AncestryPieChart({ data }: { data: AncestryDatum[] }) {
     : []) as AncestryDatum[];
 
   if (!sanitizedData || sanitizedData.length === 0) return null;
+<<<<<<< HEAD
+=======
+  
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
   const colors = [
     "#2f80ed",
     "#f2994a",
@@ -64,6 +68,10 @@ export default function AncestryPieChart({ data }: { data: AncestryDatum[] }) {
     "#6fcf97",
     "#bb6bd9",
   ];
+<<<<<<< HEAD
+=======
+  
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
   const chartData: ChartData<"pie"> = {
     labels: sanitizedData.map((item) => item.region),
     datasets: [
@@ -71,6 +79,7 @@ export default function AncestryPieChart({ data }: { data: AncestryDatum[] }) {
         label: "Ancestry %",
         data: sanitizedData.map((item) => item.percent),
         backgroundColor: sanitizedData.map((_, i) => colors[i % colors.length]),
+<<<<<<< HEAD
         borderWidth: 1,
       },
     ],
@@ -89,6 +98,57 @@ export default function AncestryPieChart({ data }: { data: AncestryDatum[] }) {
           marginTop: 10,
         }}
       >
+=======
+        borderWidth: 2,
+        borderColor: '#fff',
+      },
+    ],
+  };
+  
+  const options = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context: any) {
+            return context.label + ': ' + context.parsed + '%';
+          }
+        }
+      }
+    },
+    animation: {
+      animateRotate: true,
+      animateScale: false,
+      duration: 1000
+    }
+  };
+  
+  return (
+    <div className="ancestry-pie-chart-wrapper" style={{ 
+      width: '100%', 
+      maxWidth: 400, 
+      margin: '0 auto',
+      background: 'white',
+      padding: '20px',
+      borderRadius: '10px'
+    }}>
+      <div style={{ width: '100%', height: 300, position: 'relative' }}>
+        <Pie data={chartData} options={options} />
+      </div>
+      <div style={{
+        background: "rgba(255,255,255,0.95)",
+        borderRadius: 10,
+        padding: "12px 18px",
+        boxShadow: "0 2px 8px #0001",
+        fontSize: 14,
+        minWidth: 180,
+        marginTop: 20,
+      }}>
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
         {sanitizedData.map((item, i) => (
           <div key={i} style={{ display: "flex", alignItems: "center", marginBottom: 6 }}>
             <span style={{

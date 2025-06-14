@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   eslint: {
+<<<<<<< HEAD
     ignoreDuringBuilds: true,
   },
   typescript: {
@@ -41,6 +42,17 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+=======
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has TypeScript errors.
+    ignoreBuildErrors: true,
+  },
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
 };
 
 export default nextConfig;

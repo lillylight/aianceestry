@@ -6,7 +6,11 @@ import { FaTwitter, FaFacebook, FaFilePdf } from "react-icons/fa";
 import AncestryPieChart, { AncestryDatum } from "./AncestryPieChart";
 import { downloadAnalysisAsPDF } from "../utils/pdfUtils";
 import DNALogo from "./DNALogo";
+<<<<<<< HEAD
 import { chartToImage } from "../utils/chartToImage";
+=======
+import ChartCapture from "./ChartCapture";
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
 
 interface ResultPanelProps {
   loading: boolean;
@@ -28,7 +32,10 @@ export default function ResultPanel({
   onNewReadingAction,
 }: ResultPanelProps) {
   const resultRef = useRef<HTMLDivElement>(null);
+<<<<<<< HEAD
   const pieChartRef = useRef<HTMLDivElement>(null);
+=======
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
   const [ancestryPieData, setAncestryPieData] = useState<AncestryDatum[]>([]);
   const [pieChartDataUrl, setPieChartDataUrl] = useState<string | null>(null);
 
@@ -36,6 +43,7 @@ export default function ResultPanel({
     setAncestryPieData(ancestryData && ancestryData.length ? ancestryData : []);
   }, [ancestryData]);
 
+<<<<<<< HEAD
   // Generate PNG of pie chart after render
   useEffect(() => {
     if (!pieChartRef.current || ancestryPieData.length === 0) return;
@@ -90,10 +98,24 @@ export default function ResultPanel({
     
     return () => clearTimeout(timer);
   }, [ancestryPieData]);
+=======
+  // Handle chart capture
+  const handleChartCapture = (dataUrl: string) => {
+    console.log('Chart captured via ChartCapture component, data URL length:', dataUrl.length);
+    setPieChartDataUrl(dataUrl);
+    
+    // Store globally for immediate access
+    if (window) {
+      (window as any).latestChartDataUrl = dataUrl;
+      (window as any).currentChartDataUrl = dataUrl;
+    }
+  };
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
 
   const filledBtn = "custom-filled-btn px-1 py-0.5 text-[0.45rem] md:text-[0.55rem]";
   const outlineBtn = "custom-outline-btn px-1 py-0.5 text-[0.45rem] md:text-[0.55rem]";
 
+<<<<<<< HEAD
   // Export the chart data URL for consumption by the parent component
   useEffect(() => {
     // This allows the parent component to get the latest chart data URL for PDF generation
@@ -136,15 +158,46 @@ export default function ResultPanel({
       } else {
         // Use previously captured URL
         downloadAnalysisAsPDF(result, ancestryPieData, pieChartDataUrl || undefined);
+=======
+  const handleDownloadPDF = async () => {
+    if (!result) return;
+    
+    if (ancestryPieData.length > 0 && pieChartDataUrl) {
+      console.log('Using captured chart for PDF');
+      downloadAnalysisAsPDF(result, ancestryPieData, pieChartDataUrl);
+    } else if (ancestryPieData.length > 0) {
+      // Try to get it from global variable as fallback
+      const globalChartUrl = (window as any).latestChartDataUrl || (window as any).currentChartDataUrl;
+      if (globalChartUrl) {
+        console.log('Using chart from global variable for PDF');
+        downloadAnalysisAsPDF(result, ancestryPieData, globalChartUrl);
+      } else {
+        console.warn('No chart URL available, generating PDF without chart');
+        downloadAnalysisAsPDF(result, ancestryPieData);
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
       }
     } else {
       // No chart data at all
       downloadAnalysisAsPDF(result, []);
     }
+<<<<<<< HEAD
+=======
+    
+    // Call the parent's action handler
+    onDownloadPDFAction();
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
   };
 
   return (
     <div className="bg-gradient-to-br from-[#23252b] to-[#18191a] rounded-2xl p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center shadow-2xl w-full max-w-[420px] md:max-w-[480px] min-h-[340px] md:min-h-[420px] mx-auto animate-fade-in">
+<<<<<<< HEAD
+=======
+      {/* Hidden chart capture component */}
+      {ancestryPieData.length > 0 && (
+        <ChartCapture data={ancestryPieData} onCapture={handleChartCapture} />
+      )}
+      
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
       {/* DNA Logo on top for premium branding */}
       <div className="flex justify-center mb-4">
         <DNALogo className="w-14 h-14 md:w-16 md:h-16 text-blue-400 drop-shadow-xl animate-premium-pop" />
@@ -182,6 +235,7 @@ export default function ResultPanel({
                 <pre className="whitespace-pre-wrap text-xs bg-[#18191a] p-2 rounded border border-gray-700 overflow-x-auto max-h-52 floating-result-text !text-[#23252b] !opacity-100 !text-shadow-none text-center">
                   {(() => {
                     if (!result) return '';
+<<<<<<< HEAD
                     const compStartIdx = result.toLowerCase().indexOf('comprehensive ancestry percentage breakdown');
                     if (compStartIdx === -1) return result;
                     const afterComp = result.slice(compStartIdx);
@@ -190,6 +244,31 @@ export default function ResultPanel({
                     // Remove any numbers at the start of a line (e.g. "1.", "2.", etc) before headings/titles, but keep the line content
                     shown = shown.replace(/^[0-9]+\.(?=\s)/gm, '');
                     return shown;
+=======
+                    
+                    // Remove numbers at the start of lines (e.g. "1.", "2) ")
+                    let cleaned = result.replace(/^\s*\d+[.)]\s*/gm, '');
+                    
+                    // Remove any remaining numbers followed by a dot and space at the start of a line
+                    cleaned = cleaned.replace(/^\d+\.\s*/gm, '');
+                    
+                    // Remove any standalone numbers between paragraphs
+                    cleaned = cleaned.replace(/\n\s*\d+\s*\n/g, '\n\n');
+                    
+                    // Clean up any double newlines that might have been created
+                    cleaned = cleaned.replace(/\n{3,}/g, '\n\n');
+                    
+                    // Handle the comprehensive breakdown section
+                    const compStartIdx = cleaned.toLowerCase().indexOf('comprehensive ancestry percentage breakdown');
+                    if (compStartIdx === -1) return cleaned;
+                    
+                    const afterComp = cleaned.slice(compStartIdx);
+                    const dashIdx = afterComp.indexOf('---');
+                    
+                    return dashIdx !== -1 
+                      ? cleaned.slice(0, compStartIdx) + afterComp.slice(0, dashIdx) 
+                      : cleaned;
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
                   })()}
                 </pre>
               </div>
@@ -203,8 +282,13 @@ export default function ResultPanel({
               <div className="flex gap-2">
                 <button
                   className={filledBtn}
+<<<<<<< HEAD
                   onClick={onDownloadPDFAction}
                   disabled={loading || !pieChartDataUrl}
+=======
+                  onClick={handleDownloadPDF}
+                  disabled={loading}
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
                   aria-label="Download as PDF"
                 >
                   <FaFilePdf className="mr-1" />PDF
@@ -223,7 +307,11 @@ export default function ResultPanel({
             </div>
           )}
           {ancestryPieData.length > 0 && (
+<<<<<<< HEAD
             <div ref={pieChartRef} style={{ width: '100%', maxWidth: 340, margin: '0 auto' }}>
+=======
+            <div style={{ width: '100%', maxWidth: 340, margin: '0 auto' }}>
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
               <AncestryPieChart data={ancestryPieData} />
             </div>
           )}

@@ -9,12 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@coinbase/onchainkit": "^0.38.13",
     "@coinbase/wallet-sdk": "^4.3.2",
     "@tanstack/react-query": "^5.79.2",
     "autoprefixer": "^10.4.21",
     "axios": "^1.8.4",
     "canvas": "^3.1.0",
+=======
+    "@coinbase/onchainkit": "^0.38.8",
+    "@coinbase/wallet-sdk": "^4.3.2",
+    "@tanstack/react-query": "^5.74.7",
+    "autoprefixer": "^10.4.21",
+    "axios": "^1.8.4",
+>>>>>>> e2d9bb87ffec13c20f53b85022324dceb984fb22
     "chart.js": "^4.4.9",
     "framer-motion": "^12.9.2",
     "html2canvas": "^1.4.1",
