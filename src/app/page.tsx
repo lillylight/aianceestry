@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useMiniKit } from '@coinbase/onchainkit/minikit';
+import { useMiniKit, useAddFrame, useNotification, useOpenUrl, useClose } from '@coinbase/onchainkit/minikit';
 import UploadArea from "../components/UploadArea";
 // import PremiumUploadArea from "../components/PremiumUploadArea";
 import AncestryPieChart, { AncestryDatum } from "../components/AncestryPieChart";
@@ -83,10 +83,16 @@ function splitResultCards(text: string): string[] {
 export default function Home() {
   // MiniKit integration
   const { setFrameReady, isFrameReady, context } = useMiniKit();
+  const addFrame = useAddFrame();
+  const sendNotification = useNotification();
+  const openUrl = useOpenUrl();
+  const close = useClose();
   
   // Use wagmi's useAccount hook for reliable wallet connection detection
   const { isConnected, address } = useAccount();
   const [mounted, setMounted] = useState(false);
+  const [frameAdded, setFrameAdded] = useState(false);
+  const [notificationToken, setNotificationToken] = useState<string | null>(null);
   
   // MiniKit frame ready setup
   useEffect(() => {
@@ -192,6 +198,8 @@ export default function Home() {
         setAncestryData(res.ancestryData || []); 
         setStep('result');
         setCarouselIndex(0);
+        // Send notification if frame was added
+        sendAnalysisNotification();
       } else {
         setError("Failed to analyze image. Please try again.");
         setStep('upload');
@@ -238,13 +246,37 @@ export default function Home() {
     const url = encodeURIComponent(window.location.href);
     const message = encodeURIComponent("I just discovered my ancestry using this new AI app!");
     if (platform === 'twitter') {
-      window.open(`https://twitter.com/intent/tweet?url=${url}&text=${message}`, '_blank');
+      openUrl(`https://twitter.com/intent/tweet?url=${url}&text=${message}`);
     } else if (platform === 'facebook') {
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${message}`, '_blank');
+      openUrl(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${message}`);
     } else if (platform === 'copy') {
       navigator.clipboard.writeText(window.location.href);
       setShowShareModal(false);
       alert('Link copied!');
+    }
+  };
+
+  // Handle adding frame for notifications
+  const handleAddFrame = async () => {
+    try {
+      const result = await addFrame();
+      if (result) {
+        setFrameAdded(true);
+        setNotificationToken(result.token);
+        console.log('Frame added successfully:', result.url);
+      }
+    } catch (error) {
+      console.error('Failed to add frame:', error);
+    }
+  };
+
+  // Send notification when analysis is complete
+  const sendAnalysisNotification = () => {
+    if (notificationToken && sendNotification) {
+      sendNotification({
+        title: 'AI Ancestry Analysis Complete!',
+        body: 'Your ancestry reading is ready. Check out your results!'
+      });
     }
   };
 
@@ -303,7 +335,7 @@ export default function Home() {
     </div>,
     <div key="summary" className={`openai-card carousel-slide${fadeOut && carouselIndex === 2 ? ' fade-out' : ''} flex flex-col items-center justify-start min-h-[500px] py-12 bg-transparent shadow-none`}>
       <h2 className="text-xl font-bold text-blue-400 mb-3 w-full text-center" style={{position:'relative', top: '-0.75rem'}}>Summary Table</h2>
-      <div className="floating-result-text w-full max-w-4xl mx-auto text-base text-gray-800 font-mono bg-white/10 border-none shadow-none p-8 overflow-y-auto hide-scrollbar relative" style={{maxWidth:'950px',maxHeight:'420px', minHeight:'220px', boxShadow:'none'}}>
+      <div className="floating-result-text w-full max-w-7xl mx-auto text-base text-gray-800 font-mono bg-white/10 border-none shadow-none p-8 overflow-y-auto hide-scrollbar relative" style={{maxWidth:'1200px',maxHeight:'420px', minHeight:'220px', boxShadow:'none'}}>
         {(() => {
           const summaryTableMatch = result.match(/\| *Region\/Group *\| *Estimated Percentage *\| *Key Traits.*\|[\s\S]*?(\|.*\|.*\|.*\|\n?)+/);
           if (summaryTableMatch) {
@@ -660,6 +692,11 @@ export default function Home() {
                   <button className="openai-btn openai-btn-dark flex items-center gap-1 px-2 py-1 text-sm" onClick={()=>setShowShareModal(true)}>
                     <FaShare className="text-sm" /> SHARE
                   </button>
+                  {!frameAdded && (
+                    <button className="openai-btn openai-btn-green flex items-center gap-1 px-2 py-1 text-sm" onClick={handleAddFrame}>
+                      <FaPlus className="text-sm" /> ADD TO WALLET
+                    </button>
+                  )}
                   <button className="openai-btn openai-btn-light flex items-center gap-1 px-2 py-1 text-sm" onClick={handleNewReading}>
                     NEW READING
                   </button>
