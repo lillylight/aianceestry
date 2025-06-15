@@ -1,0 +1,23 @@
+{
+  "frame": {
+    "version": "1",
+    "name": "AI Ancestry",
+    "iconUrl": "https://aianceestry-5h7h.vercel.app/favicon.png",
+    "homeUrl": "https://aianceestry-5h7h.vercel.app/",
+    "splashImageUrl": "https://aianceestry-5h7h.vercel.app/onchainkit-logo.png",
+    "splashBackgroundColor": "#ffffff",
+    "subtitle": "Discover your ancestry with AI",
+    "description": "Get AI-powered ancestry analysis and insights based on your genetic data.",
+    "primaryCategory": "utility",
+    "tags": ["ancestry", "ai", "genetics", "dna"],
+    "heroImageUrl": "https://aianceestry-5h7h.vercel.app/onchainkit-logo.png",
+    "ogTitle": "AI Ancestry Analysis",
+    "ogDescription": "Discover your ancestry through AI-powered analysis of your genetic data.",
+    "ogImageUrl": "https://aianceestry-5h7h.vercel.app/onchainkit-logo.png"
+  },
+  "accountAssociation": {
+    "header": "eyJmaWQiOjk4MjA5MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDEyMmYyOTM1YjhBMTI1Rjg3NTM4MkZDMDVGRjE5MTZmMmE0OTYyNmMifQ",
+    "payload": "eyJkb21haW4iOiJhaWFuY2Vlc3RyeS01aDdoLnZlcmNlbC5hcHAifQ",
+    "signature": "MHgxMzNkN2VmYjJlODNjMDcwOTNkNzEyYWY2ODcwMWUyNDRhYzI2MGYwMjZmNjJlYjg3YTg4NDQ5NzE4YzYzZGQ0NjIzY2RkMmVkZGJjZjE1YTdmODFmODM5MTA0MmFiYzFhZGQ3NTQ1OWFiODczMGM0YmRkYzEzNTZiNjY1Y2FlOTFi"
+  }
+}
