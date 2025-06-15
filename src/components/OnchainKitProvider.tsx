@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { OnchainKitProvider } from '@coinbase/onchainkit';
 import { WagmiProvider, createConfig } from 'wagmi';
 import { http } from 'viem';
