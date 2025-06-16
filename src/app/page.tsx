@@ -95,7 +95,7 @@ export default function Home() {
       
       // Try to get the displayed name from the Name component
       // Check for basename or ENS name in the DOM
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         const nameElement = document.querySelector('[data-testid="ockIdentity_Text"]');
         const displayName = nameElement?.textContent || address;
         
@@ -103,6 +103,8 @@ export default function Home() {
         (window as any).userBasename = displayName;
         (window as any).userName = displayName;
       }, 1000);
+      
+      return () => clearTimeout(timer);
     }
   }, [address]);
   
@@ -120,8 +122,14 @@ export default function Home() {
   const [fadeOut, setFadeOut] = useState(false);
   const [ancestryData, setAncestryData] = useState<AncestryDatum[]>([]);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
+  const [paymentDetected, setPaymentDetected] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const analysisInProgressRef = React.useRef(false);
   const paymentDetectedRef = React.useRef(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Add mounted state to prevent hydration issues
   useEffect(() => {
@@ -478,7 +486,7 @@ export default function Home() {
 
   useEffect(() => {
     // This effect should only run on the client side
-    if (typeof window === 'undefined') return;
+    if (!isClient) return;
     
     // Reset payment detection when image changes
     if (!image) {
@@ -627,7 +635,7 @@ export default function Home() {
       observer.disconnect();
       clearInterval(interval);
     };
-  }, [image, step, triggerAnalysis]);
+  }, [image, step, triggerAnalysis, isClient]);
 
   return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#f8f9fa] to-[#e5e7eb] py-12 relative">

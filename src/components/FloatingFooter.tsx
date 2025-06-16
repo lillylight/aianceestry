@@ -56,14 +56,21 @@ const popupGlass = {
 } as React.CSSProperties;
 
 export default function FloatingFooter() {
-  const [open, setOpen] = useState<'terms'|'contact'|null>(null);
+  const [open, setOpen] = useState<string | null>(null);
   const [termsPage, setTermsPage] = useState(0);
   const [show, setShow] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
 
   const close = () => setOpen(null);
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+    
     const onScroll = () => {
       const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10;
       setShow(scrolledToBottom);
@@ -71,7 +78,7 @@ export default function FloatingFooter() {
     window.addEventListener('scroll', onScroll);
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [isClient]);
 
   return (
     <>

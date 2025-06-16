@@ -16,10 +16,15 @@ export default function PaywallGate({ children, onPaymentSuccess }: PaywallGateP
   const [paymentVerified, setPaymentVerified] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     // This effect should only run on the client side
-    if (typeof window === 'undefined') return;
+    if (!isClient) return;
     
     // Flag to track if payment success has been detected
     let paymentSuccessDetected = false;
@@ -73,7 +78,7 @@ export default function PaywallGate({ children, onPaymentSuccess }: PaywallGateP
       window.removeEventListener('message', handleMessage);
       clearInterval(checkInterval);
     };
-  }, [onPaymentSuccess]);
+  }, [onPaymentSuccess, isClient]);
 
   const handlePredictClick = () => {
     setShowDisclaimer(true);

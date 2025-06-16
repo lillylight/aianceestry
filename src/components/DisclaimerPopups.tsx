@@ -16,8 +16,15 @@ export default function DisclaimerPopups({ onCloseAll }: { onCloseAll?: () => vo
   const [showDisclaimer, setShowDisclaimer] = useState(true);
   const [showHowTo, setShowHowTo] = useState(false);
   const [accepted, setAccepted] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+    
     // Prevent background scroll when popup is open
     if (showDisclaimer || showHowTo) {
       document.body.style.overflow = 'hidden';
@@ -25,7 +32,7 @@ export default function DisclaimerPopups({ onCloseAll }: { onCloseAll?: () => vo
       document.body.style.overflow = '';
     }
     return () => { document.body.style.overflow = ''; };
-  }, [showDisclaimer, showHowTo]);
+  }, [showDisclaimer, showHowTo, isClient]);
 
   const closeDisclaimer = () => {
     setShowDisclaimer(false);

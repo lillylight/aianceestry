@@ -13,7 +13,9 @@
     "heroImageUrl": "https://aianceestry-5h7h.vercel.app/onchainkit-logo.png",
     "ogTitle": "AI Ancestry Analysis",
     "ogDescription": "Discover your ancestry through AI-powered analysis of your genetic data.",
-    "ogImageUrl": "https://aianceestry-5h7h.vercel.app/onchainkit-logo.png"
+    "ogImageUrl": "https://aianceestry-5h7h.vercel.app/onchainkit-logo.png",
+    "requiredChains": ["eip155:8453"],
+    "requiredCapabilities": ["actions.signIn", "wallet.getEthereumProvider"]
   },
   "accountAssociation": {
     "header": "eyJmaWQiOjk4MjA5MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDEyMmYyOTM1YjhBMTI1Rjg3NTM4MkZDMDVGRjE5MTZmMmE0OTYyNmMifQ",
