@@ -25,12 +25,14 @@ export function Providers(props: { children: ReactNode }) {
           apiKey={apiKey}
           projectId={process.env.NEXT_PUBLIC_CDP_PROJECT_ID}
           chain={base}
-          notificationProxyUrl="/api/notification"
           config={{
             appearance: {
               name: "AI Ancestry",
-              theme: "dark",
+              theme: "auto",
               logo: "/onchainkit-logo.png",
+            },
+            wallet: {
+              display: "modal",
             },
           }}
         >

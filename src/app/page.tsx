@@ -78,14 +78,31 @@ export default function Home() {
   
   // MiniKit hooks for mini app functionality
   const { setFrameReady, isFrameReady, context } = useMiniKit();
-  const addFrame = useAddFrame();
-  
+  const { addFrame } = useAddFrame();
+
   // Initialize MiniKit when component mounts
   useEffect(() => {
-    if (!isFrameReady) {
-      setFrameReady();
+    if (mounted) {
+      // Set frame ready with a small delay to ensure proper initialization
+      const timer = setTimeout(() => {
+        setFrameReady(true);
+        console.log('MiniKit frame ready set, context:', context);
+      }, 100);
+      
+      return () => clearTimeout(timer);
     }
-  }, [isFrameReady, setFrameReady]);
+  }, [mounted, setFrameReady, context]);
+
+  // Log MiniKit context for debugging
+  useEffect(() => {
+    if (context) {
+      console.log('MiniKit context available:', {
+        isFrameContext: !!context,
+        user: context.user,
+        client: context.client
+      });
+    }
+  }, [context]);
   // Set global user info for PDF generation
   useEffect(() => {
     if (typeof window !== 'undefined' && address) {
