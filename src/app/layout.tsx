@@ -28,10 +28,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AI Ancestry Analysis",
     description: "AI-powered ancestry analysis from photos using advanced genetic markers",
-    images: ["/logo.png"],
+    images: ["/hero.png"],
     type: "website",
   },
-
+  other: {
+    "fc:frame": "vNext",
+    "fc:frame:image": `${process.env.NEXT_PUBLIC_URL || 'https://aianceestry-5h7h.vercel.app'}/hero.png`,
+    "fc:frame:button:1": "Analyze DNA",
+    "fc:frame:post_url": `${process.env.NEXT_PUBLIC_URL || 'https://aianceestry-5h7h.vercel.app'}/api/frame`,
+  },
 };
 
 export default function RootLayout({
