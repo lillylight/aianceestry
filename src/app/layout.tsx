@@ -31,16 +31,7 @@ export const metadata: Metadata = {
     images: ["/logo.png"],
     type: "website",
   },
-  other: {
-    "fc:frame": "vNext",
-    "fc:frame:image": `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/api/frame-image`,
-    "fc:frame:button:1": "Analyze Photo",
-    "fc:frame:button:1:action": "post",
-    "fc:frame:button:2": "Learn More",
-    "fc:frame:button:2:action": "link",
-    "fc:frame:button:2:target": `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}`,
-    "fc:frame:post_url": `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/api/frame`,
-  },
+
 };
 
 export default function RootLayout({
